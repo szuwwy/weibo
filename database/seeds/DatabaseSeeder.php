@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        //临时取消批量赋值（mass assignment）保护
+        Model::unguard();
+
+        $this->call(UsersTableSeeder::class);
+
+        //恢复批量赋值（mass assignment）保护
+        Model::reguard();
     }
 }
