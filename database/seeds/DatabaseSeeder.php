@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
         //临时取消批量赋值（mass assignment）保护
         Model::unguard();
 
-        $this->call(UsersTableSeeder::class);
+        $this->call([
+            UsersTableSeeder::class,
+            StatusesTableSeeder::class,
+        ]);
 
         //恢复批量赋值（mass assignment）保护
         Model::reguard();

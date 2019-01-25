@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 use Mail;
-use Auth;
 
 class UsersController extends Controller
 {
@@ -27,7 +27,10 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        $statuses = $user->statuses()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('users.show', compact('user','statuses'));
     }
 
     public function store(Request $request)
@@ -98,8 +101,8 @@ class UsersController extends Controller
 
     protected function sendEmailConfirmationTo($user)
     {
-        $view    = 'emails.confirm';
-        $data    = compact('user');
+        $view = 'emails.confirm';
+        $data = compact('user');
         // $from    = 'summer@example.com';
         // $name    = 'Summer';
         $to      = $user->email;
@@ -115,7 +118,7 @@ class UsersController extends Controller
     {
         $user = User::where('activation_token', $token)->firstOrFail();
 
-        $user->activated = true;
+        $user->activated        = true;
         $user->activation_token = null;
         $user->save();
 
