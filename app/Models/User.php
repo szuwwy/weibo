@@ -27,7 +27,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+    //boot 方法会在用户模型类完成初始化之后进行加载，因此我们对事件的监听需要放在该方法中.static 方法体调用static::create()就会报错
+    public static function boot()
+    {
+        parent::boot();
+        //creating 用于监听模型被创建之前的事件，created 用于监听模型被创建之后的事件
+        static::creating(function ($user){
+            $user->activation_token = str_random(30);
+        });
+    }
 
     public function gravatar($size = '100')
     {
