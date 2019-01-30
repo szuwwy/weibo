@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,
             StatusesTableSeeder::class,
+            FollowersTableSeeder::class,
         ]);
 
         //恢复批量赋值（mass assignment）保护
